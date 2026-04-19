@@ -1,2 +1,4 @@
 <Solution>
+  <Project Path="ReadingCompanion.Tests/ReadingCompanion.Tests.csproj" />
+  <Project Path="ReadingCompanion/ReadingCompanion.csproj" />
 </Solution>
