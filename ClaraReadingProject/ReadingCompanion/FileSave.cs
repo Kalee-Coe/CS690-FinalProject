@@ -15,8 +15,19 @@ public class FileSaver
         }
     }
 
+
     public void AppendLine(string line)
     {
         File.AppendAllText(this.fileName, line + Environment.NewLine);
     }
+
+    public string[] ReadAllLines()
+    {
+        if (File.Exists(this.fileName))
+        {
+            return File.ReadAllLines(this.fileName);
+        }
+        return new string[0];
+    }
+
 }
