@@ -22,4 +22,12 @@ public class FileSaverTests
         Assert.Single(lines);
         Assert.Equal("Test Line", lines[0]);
     }
+    
+    [Fact]
+    public void Test_ReadEmptyFile()
+    {
+        var lines = fileSaver.ReadAllLines();
+        Assert.Empty(lines);
+    }
+
 }
