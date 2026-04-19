@@ -21,6 +21,11 @@ public class FileSaver
         File.AppendAllText(this.fileName, line + Environment.NewLine);
     }
 
+     public void WriteAllLines(List<string> lines)
+    {
+        File.WriteAllLines(this.fileName, lines);
+    }
+
     public string[] ReadAllLines()
     {
         if (File.Exists(this.fileName))

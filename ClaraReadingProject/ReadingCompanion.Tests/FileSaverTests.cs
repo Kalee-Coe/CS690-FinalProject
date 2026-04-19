@@ -22,6 +22,21 @@ public class FileSaverTests
         Assert.Single(lines);
         Assert.Equal("Test Line", lines[0]);
     }
+
+    [Fact]
+    public void Test_WriteAllLines()
+    {
+        List<string> lines = new List<string>();
+        lines.Add("Line 1");
+        lines.Add("Line 2");
+        lines.Add("Line 3");
+        
+        fileSaver.WriteAllLines(lines);
+        
+        var result = fileSaver.ReadAllLines();
+        Assert.Equal(3, result.Length);
+    }
+
     
     [Fact]
     public void Test_ReadEmptyFile()
