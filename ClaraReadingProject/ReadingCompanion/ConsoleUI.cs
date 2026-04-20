@@ -17,7 +17,10 @@ public class ConsoleUI
             Console.WriteLine("");
             Console.WriteLine("=== Clara's Reading Companion ===");
             Console.WriteLine("1. Add a book to my library");
-            Console.WriteLine("2. Exit");
+            Console.WriteLine("2. Add a book to my to-read list");
+            Console.WriteLine("3. Mark a book as finished");
+            Console.WriteLine("4. View notes for finished books");
+            Console.WriteLine("5. Exit");
             Console.Write("Select an option: ");
 
             command = Console.ReadLine();
@@ -28,6 +31,18 @@ public class ConsoleUI
             }
             else if (command == "2")
             {
+                AddBookToToRead();
+            }
+            else if (command == "3")
+            {
+                MarkBookAsFinished();
+            }
+            else if (command == "4")
+            {
+                dataManager.ViewNotesForFinishedBooks();
+            }
+            else if (command == "5")
+            {
                 Console.WriteLine("Thank You!");
             }
             else
@@ -35,7 +50,7 @@ public class ConsoleUI
                 Console.WriteLine("Invalid option. Please try again.");
             }
 
-        } while (command != "2");
+        } while (command != "5");
     }
 
     public void AddBookToLibrary()
@@ -54,5 +69,93 @@ public class ConsoleUI
 
 
         dataManager.AddBookToLibrary(title, author);
+    }
+
+    public void AddBookToToRead()
+    {
+        Console.Write("Enter book title: ");
+        string title = Console.ReadLine();
+        
+        Console.Write("Enter book author: ");
+        string author = Console.ReadLine();
+
+        if (title.Length == 0 || author.Length == 0)
+        {
+            Console.WriteLine("Title and author cannot be empty!");
+            return;
+        }
+
+        dataManager.AddBookToToRead(title, author);
+    }
+
+    public void MarkBookAsFinished()
+    {
+        Console.Write("Enter book title: ");
+        string title = Console.ReadLine();
+        
+        Console.Write("Enter book author: ");
+        string author = Console.ReadLine();
+
+        if (title.Length == 0 || author.Length == 0)
+        {
+            Console.WriteLine("Title and author cannot be empty!");
+            return;
+        }
+
+        if (dataManager.IsBookInFinished(title, author))
+        {
+            Console.WriteLine("You have already finished this book!");
+            return;
+        }
+
+        Console.Write("Enter your rating (1-5): ");
+        string ratingInput = Console.ReadLine();
+        int rating;
+        if (!int.TryParse(ratingInput, out rating))
+        {
+            Console.WriteLine("Invalid rating. Using 0.");
+            rating = 0;
+        }
+        
+        if (rating < 1 || rating > 5)
+        {
+            Console.WriteLine("Rating should be between 1 and 5. Using 0.");
+            rating = 0;
+        }
+
+        Console.Write("Enter your notes (press Enter for no notes): ");
+        string notes = Console.ReadLine();
+        
+        if (notes.Length == 0)
+        {
+            notes = "No notes";
+        }
+
+        string dateFinished = DateTime.Now.ToString("MM/dd/yyyy");
+
+        dataManager.MarkBookAsFinished(title, author, rating, notes, dateFinished);
+
+        if (dataManager.IsBookInToRead(title, author))
+        {
+            Console.Write("This book is in your to-read list. Remove it? (yes/no): ");
+            string removeFromToRead = Console.ReadLine();
+            
+            if (removeFromToRead.ToLower() == "yes" || removeFromToRead.ToLower() == "y")
+            {
+                dataManager.RemoveBookFromToRead(title, author);
+                Console.WriteLine("Removed from to-read list.");
+            }
+        }
+
+        if (!dataManager.IsBookInLibrary(title, author))
+        {
+            Console.Write("Add this book to your library? (yes/no): ");
+            string addToLibrary = Console.ReadLine();
+            
+            if (addToLibrary.ToLower() == "yes" || addToLibrary.ToLower() == "y")
+            {
+                dataManager.AddBookToLibrary(title, author);
+            }
+        }
     }
 }

@@ -12,6 +12,8 @@ public class BookTests
         Assert.Equal("Test Title", book.Title);
         Assert.Equal("Test Author", book.Author);
         Assert.False(book.Owned);
+        Assert.False(book.Finished);
+        Assert.Equal("No notes", book.Notes);
     }
 
     [Fact]
