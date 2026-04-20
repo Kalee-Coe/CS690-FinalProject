@@ -1,3 +1,5 @@
 Kings:Cole Bennet
 Crooks:Cole Diem
 Jane Eyre:Charlotte Bronte
+Love:Jane Doe
+Hurry:Jane Doe
