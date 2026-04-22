@@ -38,6 +38,7 @@ public class DataManagerTests
      [Fact]
     public void Test_AddBookToToRead()
     {
+        dataManager.ToRead.Clear();
         int initialCount = dataManager.ToRead.Count;
         dataManager.AddBookToToRead("Test Book", "Test Author");
         Assert.Equal(initialCount + 1, dataManager.ToRead.Count);
