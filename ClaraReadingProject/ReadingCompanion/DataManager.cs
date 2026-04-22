@@ -5,24 +5,29 @@ public class DataManager
     FileSaver libraryFile;
     FileSaver toReadFile;
     FileSaver finishedFile;
+    FileSaver goalFile;
 
     public List<Book> Library { get; }
     public List<Book> ToRead { get; }
     public List<Book> Finished { get; }
+    public int YearlyGoal { get; set; }
 
     public DataManager()
     {
         libraryFile = new FileSaver("library.txt");
         toReadFile = new FileSaver("toread.txt");
         finishedFile = new FileSaver("finished.txt");
+        goalFile = new FileSaver("goal.txt");
 
         Library = new List<Book>();
         ToRead = new List<Book>();
         Finished = new List<Book>();
+        YearlyGoal = 0;
 
         LoadLibrary();
         LoadToRead();
         LoadFinished();
+        LoadGoal();
     }
 
     public void LoadLibrary()
@@ -91,6 +96,18 @@ public class DataManager
         }
     }
 
+    public void LoadGoal()
+    {
+        var lines = goalFile.ReadAllLines();
+        if (lines.Length > 0)
+        {
+            int goal;
+            if (int.TryParse(lines[0], out goal))
+            {
+                YearlyGoal = goal;
+            }
+        }
+    }
 
     public void SynchronizeLibrary()
     {
@@ -130,6 +147,13 @@ public class DataManager
             lines.Add(book.Title + ":" + book.Author + ":" + ratingString + ":" + book.Notes + ":" + book.DateFinished + ":finished");
         }
         finishedFile.WriteAllLines(lines);
+    }
+
+    public void SynchronizeGoal()
+    {
+        List<string> lines = new List<string>();
+        lines.Add(YearlyGoal.ToString());
+        goalFile.WriteAllLines(lines);
     }
 
     public bool IsBookInLibrary(string title, string author)
@@ -245,6 +269,59 @@ public class DataManager
         SynchronizeFinished();
         
         Console.WriteLine("Book marked as finished!");
+    }
+
+    public void SetYearlyGoal(int goal)
+    {
+        this.YearlyGoal = goal;
+        SynchronizeGoal();
+        Console.WriteLine("Yearly goal set to " + goal + " books!");
+    }
+
+    public void ViewReadingProgress()
+    {
+        int finishedCount = Finished.Count;
+        
+        Console.WriteLine("Yearly Goal: " + YearlyGoal + " books");
+        Console.WriteLine("Books Finished: " + finishedCount);
+        
+        if (YearlyGoal > 0)
+        {
+            int remaining = YearlyGoal - finishedCount;
+            if (remaining < 0)
+            {
+                remaining = 0;
+            }
+            
+            Console.WriteLine("Books Remaining: " + remaining);
+            
+            double percentage = (double)finishedCount / YearlyGoal * 100;
+            Console.WriteLine("Progress: " + percentage.ToString("0.00") + "%");
+            
+            DateTime today = DateTime.Now;
+            int currentDayOfYear = today.DayOfYear;
+            int totalDaysInYear = 365;
+            
+            if (DateTime.IsLeapYear(today.Year))
+            {
+                totalDaysInYear = 366;
+            }
+            
+            double expectedProgress = (double)currentDayOfYear / totalDaysInYear * YearlyGoal;
+            
+            if (finishedCount > expectedProgress)
+            {
+                Console.WriteLine("Status: Ahead of pace! Keep it up!");
+            }
+            else if (finishedCount < expectedProgress)
+            {
+                Console.WriteLine("Status: Behind pace. Time to catch up!");
+            }
+            else
+            {
+                Console.WriteLine("Status: Right on pace!");
+            }
+        }
     }
 
     public void ViewNotesForFinishedBooks()

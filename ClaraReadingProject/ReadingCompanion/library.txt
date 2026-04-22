@@ -3,3 +3,5 @@ Crooks:Cole Diem
 Jane Eyre:Charlotte Bronte
 Love:Jane Doe
 Hurry:Jane Doe
+No David:Kalee Coe
+Yes:Kalee Coe
