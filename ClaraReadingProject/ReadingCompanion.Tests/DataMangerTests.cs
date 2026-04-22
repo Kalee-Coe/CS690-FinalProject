@@ -11,6 +11,7 @@ public class DataManagerTests
         File.WriteAllText("library.txt", "");
         File.WriteAllText("to_read.txt", "");
         File.WriteAllText("finished.txt", "");
+        File.WriteAllText("goal.txt", "0");
         dataManager = new DataManager();
     }
 
@@ -57,6 +58,14 @@ public class DataManagerTests
         bool result = dataManager.IsBookInLibrary("Check Book", "Check Author");
         Assert.True(result);
     }
+
+    [Fact]
+    public void Test_SetYearlyGoal()
+    {
+        dataManager.SetYearlyGoal(50);
+        Assert.Equal(50, dataManager.YearlyGoal);
+    }
+
 
     [Fact]
     public void Test_RemoveBookFromToRead()

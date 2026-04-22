@@ -19,8 +19,10 @@ public class ConsoleUI
             Console.WriteLine("1. Add a book to my library");
             Console.WriteLine("2. Add a book to my to-read list");
             Console.WriteLine("3. Mark a book as finished");
-            Console.WriteLine("4. View notes for finished books");
-            Console.WriteLine("5. Exit");
+            Console.WriteLine("4. View reading progress");
+            Console.WriteLine("5. View notes for finished books");
+            Console.WriteLine("6. Set yearly reading goal");
+            Console.WriteLine("7. Exit");
             Console.Write("Select an option: ");
 
             command = Console.ReadLine();
@@ -39,9 +41,17 @@ public class ConsoleUI
             }
             else if (command == "4")
             {
-                dataManager.ViewNotesForFinishedBooks();
+                dataManager.ViewReadingProgress();
             }
             else if (command == "5")
+            {
+                dataManager.ViewNotesForFinishedBooks();
+            }
+            else if (command == "6")
+            {
+                SetYearlyGoal();
+            }
+            else if (command == "7")
             {
                 Console.WriteLine("Thank You!");
             }
@@ -50,7 +60,7 @@ public class ConsoleUI
                 Console.WriteLine("Invalid option. Please try again.");
             }
 
-        } while (command != "5");
+        } while (command != "7");
     }
 
     public void AddBookToLibrary()
@@ -158,4 +168,27 @@ public class ConsoleUI
             }
         }
     }
+
+    public void SetYearlyGoal()
+    {
+        Console.Write("Enter your yearly reading goal (number of books): ");
+        string goalInput = Console.ReadLine();
+        int goal;
+        if (int.TryParse(goalInput, out goal))
+        {
+            if (goal > 0)
+            {
+                dataManager.SetYearlyGoal(goal);
+            }
+            else
+            {
+                Console.WriteLine("Goal must be greater than 0.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid number.");
+        }
+    }
 }
+
