@@ -332,6 +332,58 @@ public class DataManager
             return;
         }
 
+        Console.WriteLine("Select a book to view notes:");
+        for (int i = 0; i < Finished.Count; i++)
+        {
+            Console.WriteLine((i + 1) + ". " + Finished[i].ToString());
+        }
+        Console.WriteLine((Finished.Count + 1) + ". View all notes");
+
+        Console.Write("Enter your choice: ");
+        string choiceInput = Console.ReadLine();
+        int choice;
+        if (!int.TryParse(choiceInput, out choice))
+        {
+            Console.WriteLine("Invalid selection.");
+            return;
+        }
+
+        if (choice < 1 || choice > Finished.Count + 1)
+        {
+            Console.WriteLine("Invalid selection.");
+            return;
+        }
+
+        if (choice == Finished.Count + 1)
+        {
+            DisplayAllNotes();
+        }
+        else
+        {
+            DisplaySingleBookNotes(Finished[choice - 1]);
+        }
+    }
+
+    public void DisplaySingleBookNotes(Book book)
+    {
+        Console.WriteLine("Title: " + book.Title);
+        Console.WriteLine("Author: " + book.Author);
+        
+        if (book.Rating.HasValue)
+        {
+            Console.WriteLine("Rating: " + book.Rating.Value + "/5");
+        }
+        else
+        {
+            Console.WriteLine("Rating: Not rated");
+        }
+        
+        Console.WriteLine("Date Finished: " + book.DateFinished);
+        Console.WriteLine("Notes: " + book.Notes);
+    }
+
+    public void DisplayAllNotes()
+    {
         foreach (var book in Finished)
         {
             Console.WriteLine("Title: " + book.Title);
@@ -348,7 +400,7 @@ public class DataManager
             
             Console.WriteLine("Date Finished: " + book.DateFinished);
             Console.WriteLine("Notes: " + book.Notes);
-            Console.WriteLine("Notes Added!");
+            Console.WriteLine("------------------------------");
         }
     }
 }
